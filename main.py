@@ -57,7 +57,6 @@ class SSPANEL:
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         print(msg)
 
-        # https://api.telegram.org/bot + TG_TOKEN + /sendmessage?chat_id= + TG_CHAT_ID + &parse_mode=HTML&text=" . rawurlencode($options['message']
         tg_url = "https://api.telegram.org/bot" + token + "/sendmessage?chat_id=" + chat + "&parse_mode=HTML&text=" + self.url_encode(msg)
         print(tg_url)
         session = requests.session()
