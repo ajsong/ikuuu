@@ -54,13 +54,15 @@ class SSPANEL:
             {"name": "帐号信息", "value": email},
             {"name": "签到信息", "value": f"{sign_msg}"},
         ]
-        msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
+        msg = "iKuuu自动签到\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         print(msg)
 
-        tg_url = "https://api.telegram.org/bot" + token + "/sendmessage?chat_id=" + chat + "&parse_mode=HTML&text=" + self.url_encode(msg)
-        print(tg_url)
-        session = requests.session()
-        session.get(url=url, verify=False)
+        try:
+            tg_url = "https://api.telegram.org/bot" + token + "/sendmessage?chat_id=" + chat + "&parse_mode=HTML&text=" + self.url_encode(msg)
+            session = requests.session()
+            session.get(url=tg_url, verify=False)
+        except Exception as e:
+            print(e)
         
         return msg
 
