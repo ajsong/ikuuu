@@ -32,8 +32,5 @@ jobs:
         EMAIL: ${{ secrets.EMAIL }}
         PASSWORD: ${{ secrets.PASSWORD }}
         DOMAIN: ${{ secrets.DOMAIN }}
-        QYWX_CORPID: ${{ secrets.QYWX_CORPID }}
-        QYWX_AGENTID: ${{ secrets.QYWX_AGENTID }}
-        QYWX_CORPSECRET: ${{ secrets.QYWX_CORPSECRET }}
-        QYWX_TOUSER: ${{ secrets.QYWX_TOUSER }}
-        QYWX_MEDIA_ID: ${{ secrets.QYWX_MEDIA_ID }}
+        TG_TOKEN: ${{ secrets.TG_TOKEN }}
+        TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
