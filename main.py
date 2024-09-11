@@ -54,7 +54,7 @@ class SSPANEL:
             {"name": "帐号信息", "value": email},
             {"name": "签到信息", "value": f"{sign_msg}"},
         ]
-        msg = "iKuuu自动签到\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
+        msg = "iKuuu自动签到\n" + "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
         print(msg)
 
         try:
