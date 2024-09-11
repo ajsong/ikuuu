@@ -104,8 +104,9 @@ class SSPANEL:
             {"name": "签到信息", "value": f"{sign_msg}"},
         ]
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
-        self.message2qywxapp(qywx_corpid=qywx_corpid, qywx_agentid=qywx_agentid, qywx_corpsecret=qywx_corpsecret,
-                             qywx_touser=qywx_touser, qywx_media_id=qywx_media_id, content=msg)
+        # self.message2qywxapp(qywx_corpid=qywx_corpid, qywx_agentid=qywx_agentid, qywx_corpsecret=qywx_corpsecret,
+        #                     qywx_touser=qywx_touser, qywx_media_id=qywx_media_id, content=msg)
+        print(msg)
         return msg
 
 
