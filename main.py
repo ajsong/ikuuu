@@ -2,69 +2,23 @@
 import json
 import requests
 import os
+from urllib import parse
 
 #账户
 EMAIL = os.environ["EMAIL"]
 PASSWORD = os.environ["PASSWORD"]
 DOMAIN = os.environ["DOMAIN"]
-
-
-# 企业微信配置
-QYWX_CORPID = os.environ["QYWX_CORPID"]
-QYWX_AGENTID = os.environ["QYWX_AGENTID"]
-QYWX_CORPSECRET = os.environ["QYWX_CORPSECRET"]
-QYWX_TOUSER = os.environ["QYWX_TOUSER"]
-QYWX_MEDIA_ID = os.environ["QYWX_MEDIA_ID"]
+TG_TOKEN = os.environ["TG_TOKEN"]
+TG_CHAT_ID = os.environ["TG_CHAT_ID"]
 
 class SSPANEL:
     name = "SSPANEL"
 
     def __init__(self, check_item):
         self.check_item = check_item
-        self.qywx_corpid = QYWX_CORPID
-        self.qywx_agentid = QYWX_AGENTID
-        self.qywx_corpsecret = QYWX_CORPSECRET
-        self.qywx_touser = QYWX_TOUSER
-        self.qywx_media_id = QYWX_MEDIA_ID
 
-    def message2qywxapp(self, qywx_corpid, qywx_agentid, qywx_corpsecret, qywx_touser, qywx_media_id, content):
-        print("企业微信应用消息推送开始")
-        res = requests.get(
-            f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={qywx_corpid}&corpsecret={qywx_corpsecret}"
-        )
-        token = res.json().get("access_token", False)
-        if qywx_media_id:
-            data = {
-                "touser": qywx_touser,
-                "msgtype": "mpnews",
-                "agentid": int(qywx_agentid),
-                "mpnews": {
-                    "articles": [
-                        {
-                            "title": "ikuuu 签到通知",
-                            "thumb_media_id": qywx_media_id,
-                            "content_source_url": "https://ikuuu.co/",
-                            "content": content.replace("\n", "<br>"),
-                            "digest": content,
-                        }
-                    ]
-                },
-            }
-        else:
-            data = {
-                "touser": qywx_touser,
-                "agentid": int(qywx_agentid),
-                "msgtype": "textcard",
-                "textcard": {
-                    "title": "ikuuu 签到通知",
-                    "description": content,
-                    "url": "https://ikuuu.co/",
-                },
-            }
-        result = requests.post(url=f"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={token}",
-                               data=json.dumps(data))
-        # print(result)
-        return
+    def url_encode(self, string):
+        return parse.quote(string, safe='', encoding=None, errors=None)
 
     def sign(self, email, password, url):
         email = email.replace("@", "%40")
@@ -93,24 +47,26 @@ class SSPANEL:
         email = self.check_item.get("email")
         password = self.check_item.get("password")
         url = self.check_item.get("url")
-        qywx_corpid = self.qywx_corpid
-        qywx_agentid = self.qywx_agentid
-        qywx_corpsecret = self.qywx_corpsecret
-        qywx_touser = self.qywx_touser
-        qywx_media_id = self.qywx_media_id
+        token = self.check_item.get("token")
+        chat = self.check_item.get("chat")
         sign_msg = self.sign(email=email, password=password, url=url)
         msg = [
             {"name": "帐号信息", "value": email},
             {"name": "签到信息", "value": f"{sign_msg}"},
         ]
         msg = "\n".join([f"{one.get('name')}: {one.get('value')}" for one in msg])
-        # self.message2qywxapp(qywx_corpid=qywx_corpid, qywx_agentid=qywx_agentid, qywx_corpsecret=qywx_corpsecret,
-        #                     qywx_touser=qywx_touser, qywx_media_id=qywx_media_id, content=msg)
         print(msg)
+
+        # https://api.telegram.org/bot + TG_TOKEN + /sendmessage?chat_id= + TG_CHAT_ID + &parse_mode=HTML&text=" . rawurlencode($options['message']
+        tg_url = "https://api.telegram.org/bot" + token + "/sendmessage?chat_id=" + chat + "&parse_mode=HTML&text=" + self.url_encode(msg)
+        print(tg_url)
+        session = requests.session()
+        session.get(url=url, verify=False)
+        
         return msg
 
 
 
 if __name__ == "__main__":
-    _check_item = {'email': EMAIL, 'password': PASSWORD, 'url': DOMAIN}
+    _check_item = {'email': EMAIL, 'password': PASSWORD, 'url': DOMAIN, 'token': TG_TOKEN, 'chat': TG_CHAT_ID}
     SSPANEL(check_item=_check_item).main()
