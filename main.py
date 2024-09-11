@@ -8,8 +8,8 @@ from urllib import parse
 EMAIL = os.environ["EMAIL"]
 PASSWORD = os.environ["PASSWORD"]
 DOMAIN = os.environ["DOMAIN"]
-TG_TOKEN = os.environ["TG_TOKEN"]
-TG_CHAT_ID = os.environ["TG_CHAT_ID"]
+TG_TOKEN = os.environ["TGTOKEN"]
+TG_CHAT_ID = os.environ["TGCHATID"]
 
 class SSPANEL:
     name = "SSPANEL"
