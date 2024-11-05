@@ -4,6 +4,8 @@ import requests
 import os
 from urllib import parse
 
+requests.packages.urllib3.disable_warnings()
+
 #账户
 EMAIL = os.environ["EMAIL"]
 PASSWORD = os.environ["PASSWORD"]
