@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import json
 import requests
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import os
 from urllib import parse
 
-requests.packages.urllib3.disable_warnings()
+#requests.packages.urllib3.disable_warnings()
 
 #账户
 EMAIL = os.environ["EMAIL"]
@@ -39,6 +40,7 @@ class SSPANEL:
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36",
                 "Referer": url + "/user",
             }
+            requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             response = session.post(url + "/user/checkin", headers=headers, verify=False)
             msg = response.json().get("msg")
         except Exception as e:
@@ -62,6 +64,7 @@ class SSPANEL:
         try:
             tg_url = "https://api.telegram.org/bot" + token + "/sendmessage?chat_id=" + chat + "&parse_mode=HTML&text=" + self.url_encode(msg)
             session = requests.session()
+            #requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
             session.get(url=tg_url, verify=False)
         except Exception as e:
             print(e)
